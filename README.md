@@ -33,16 +33,89 @@
 
 ---
 
-## 📦 Installation & Build
+## 📦 Installation
+
+### 1. Via Homebrew (Recommended on macOS)
+
+Install directly using the official tap:
 
 ```bash
-cd Documents/Repositories/ineedspace
-go build -o ineedspace .
+brew install unbelauscht/tap/ineedspace
 ```
 
-To install globally into your `PATH`:
+Or add the tap manually first:
 ```bash
-go install .
+brew tap unbelauscht/tap
+brew install ineedspace
+```
+
+To update in the future:
+```bash
+brew upgrade ineedspace
+```
+
+---
+
+### 2. Pre-Compiled macOS Binaries
+
+Download pre-built, signed archives directly from [GitHub Releases](https://github.com/unbelauscht/ineedspace/releases/latest):
+
+#### Apple Silicon (M1 / M2 / M3 / M4):
+```bash
+curl -sSL https://github.com/unbelauscht/ineedspace/releases/latest/download/ineedspace-darwin-arm64.tar.gz | tar -xz
+sudo install -m 755 ineedspace-darwin-arm64 /usr/local/bin/ineedspace
+rm ineedspace-darwin-arm64
+```
+
+#### Intel Macs:
+```bash
+curl -sSL https://github.com/unbelauscht/ineedspace/releases/latest/download/ineedspace-darwin-amd64.tar.gz | tar -xz
+sudo install -m 755 ineedspace-darwin-amd64 /usr/local/bin/ineedspace
+rm ineedspace-darwin-amd64
+```
+
+#### Universal macOS Binary (Intel & Apple Silicon):
+```bash
+curl -sSL https://github.com/unbelauscht/ineedspace/releases/latest/download/ineedspace-darwin-universal.tar.gz | tar -xz
+sudo install -m 755 ineedspace-darwin-universal /usr/local/bin/ineedspace
+rm ineedspace-darwin-universal
+```
+
+---
+
+### 3. Via Go Install
+
+If you have Go 1.22+ installed, compile and install directly into your `$GOPATH/bin`:
+
+```bash
+go install github.com/unbelauscht/ineedspace@latest
+```
+
+---
+
+### 4. Build From Source
+
+```bash
+# Clone repository
+git clone https://github.com/unbelauscht/ineedspace.git
+cd ineedspace
+
+# Build optimized binary
+go build -trimpath -ldflags="-s -w" -o ineedspace .
+
+# (Optional) Move to your PATH
+sudo cp ineedspace /usr/local/bin/
+```
+
+---
+
+### 🔍 Verify Installation
+
+Verify that `ineedspace` is properly installed and accessible:
+
+```bash
+ineedspace --version
+ineedspace --help
 ```
 
 ---
@@ -52,7 +125,7 @@ go install .
 ### 1. Interactive Terminal UI (Default)
 Simply run:
 ```bash
-./ineedspace
+ineedspace
 ```
 
 #### Keybindings

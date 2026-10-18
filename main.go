@@ -16,6 +16,8 @@ import (
 )
 
 var (
+	version       = "0.1.0"
+	versionFlag   bool
 	scanOnlyFlag  bool
 	cleanSafeFlag bool
 	dryRunFlag    bool
@@ -24,6 +26,8 @@ var (
 )
 
 func init() {
+	flag.BoolVar(&versionFlag, "version", false, "Show version information")
+	flag.BoolVar(&versionFlag, "v", false, "Show version information")
 	flag.BoolVar(&scanOnlyFlag, "scan", false, "Scan and print disk breakdown without launching interactive TUI")
 	flag.BoolVar(&cleanSafeFlag, "clean-safe", false, "Clean all safe caches immediately without interactive TUI")
 	flag.BoolVar(&dryRunFlag, "dry-run", false, "Simulate cleaning without deleting anything")
@@ -34,16 +38,24 @@ func init() {
 func main() {
 	flag.Parse()
 
-	// Handle subcommands like "ineedspace scan"
+	// Handle subcommands like "ineedspace scan" or "ineedspace version"
 	args := flag.Args()
 	if len(args) > 0 {
 		switch args[0] {
+		case "version":
+			fmt.Printf("ineedspace v%s\n", version)
+			return
 		case "scan":
 			scanOnlyFlag = true
 		case "help":
 			printHelp()
 			return
 		}
+	}
+
+	if versionFlag {
+		fmt.Printf("ineedspace v%s\n", version)
+		return
 	}
 
 	if helpFlag {
@@ -171,6 +183,7 @@ FLAGS:
   --clean-safe       Automatically clean all safe caches without prompting
   --dry-run          Simulate cleanup actions without deleting any files
   --category <name>  Filter scan by category (ai, containers, dev, sdks, system, downloads)
+  --version, -v      Show version information
   --help             Show this help screen
 
 KEYBINDINGS IN TUI:
