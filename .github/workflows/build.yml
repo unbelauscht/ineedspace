@@ -83,13 +83,12 @@ jobs:
           if [ -z "$VERSION" ] || [ "$VERSION" = "main" ]; then
             VERSION="0.1.0"
           fi
-          ARM64_SHA=$(shasum -a 256 dist/ineedspace-darwin-arm64.tar.gz | awk '{print $1}')
-          AMD64_SHA=$(shasum -a 256 dist/ineedspace-darwin-amd64.tar.gz | awk '{print $1}')
+          UNIVERSAL_SHA=$(shasum -a 256 dist/ineedspace-darwin-universal.tar.gz | awk '{print $1}')
 
           cp Formula/ineedspace.rb dist/ineedspace.rb
-          sed -i.bak "s/CHECKSUM_ARM64_PLACEHOLDER/${ARM64_SHA}/g" dist/ineedspace.rb
-          sed -i.bak "s/CHECKSUM_AMD64_PLACEHOLDER/${AMD64_SHA}/g" dist/ineedspace.rb
-          sed -i.bak "s/version \"0.1.0\"/version \"${VERSION}\"/g" dist/ineedspace.rb
+          sed -i.bak "s/sha256 \".*\"/sha256 \"${UNIVERSAL_SHA}\"/g" dist/ineedspace.rb
+          sed -i.bak "s/download\/v[0-9.]*\/ineedspace/download\/v${VERSION}\/ineedspace/g" dist/ineedspace.rb
+          sed -i.bak "s/version \"[0-9.]*\"/version \"${VERSION}\"/g" dist/ineedspace.rb
           rm -f dist/ineedspace.rb.bak
           echo "==> Generated Homebrew Formula:"
           cat dist/ineedspace.rb

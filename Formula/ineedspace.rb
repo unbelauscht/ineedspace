@@ -1,25 +1,13 @@
 class Ineedspace < Formula
   desc "Interactive TUI and CLI disk cleaner for developers and sysadmins"
   homepage "https://github.com/unbelauscht/ineedspace"
+  url "https://github.com/unbelauscht/ineedspace/releases/download/v0.1.0/ineedspace-darwin-universal.tar.gz"
+  sha256 "b0ec459652d9fab5d8bb47432787837576a01918237401a6f2ef6917cf5f67ff"
   version "0.1.0"
   license "MIT"
 
-  on_macos do
-    if Hardware::CPU.arm?
-      url "https://github.com/unbelauscht/ineedspace/releases/download/v#{version}/ineedspace-darwin-arm64.tar.gz"
-      sha256 "8e5309baa805b06827afeafed649016a43b7a95449c51a581fd80e9161986557"
-
-      def install
-        bin.install "ineedspace-darwin-arm64" => "ineedspace"
-      end
-    else
-      url "https://github.com/unbelauscht/ineedspace/releases/download/v#{version}/ineedspace-darwin-amd64.tar.gz"
-      sha256 "a044435a6c0471ee5a0de1beb38a20c2348502ba736ebfbd5ad4c03ed3725a43"
-
-      def install
-        bin.install "ineedspace-darwin-amd64" => "ineedspace"
-      end
-    end
+  def install
+    bin.install "ineedspace-darwin-universal" => "ineedspace"
   end
 
   test do
