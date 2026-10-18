@@ -4,6 +4,7 @@
   "extends": [
     "config:recommended"
   ],
+  "dependencyDashboard": true,
   "labels": [
     "dependencies"
   ],
