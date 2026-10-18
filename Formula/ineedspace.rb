@@ -7,14 +7,14 @@ class Ineedspace < Formula
   on_macos do
     if Hardware::CPU.arm?
       url "https://github.com/unbelauscht/ineedspace/releases/download/v#{version}/ineedspace-darwin-arm64.tar.gz"
-      sha256 "CHECKSUM_ARM64_PLACEHOLDER"
+      sha256 "8e5309baa805b06827afeafed649016a43b7a95449c51a581fd80e9161986557"
 
       def install
         bin.install "ineedspace-darwin-arm64" => "ineedspace"
       end
     else
       url "https://github.com/unbelauscht/ineedspace/releases/download/v#{version}/ineedspace-darwin-amd64.tar.gz"
-      sha256 "CHECKSUM_AMD64_PLACEHOLDER"
+      sha256 "a044435a6c0471ee5a0de1beb38a20c2348502ba736ebfbd5ad4c03ed3725a43"
 
       def install
         bin.install "ineedspace-darwin-amd64" => "ineedspace"
