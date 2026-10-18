@@ -16,7 +16,7 @@ import (
 )
 
 var (
-	version       = "0.2.0"
+	version       = "0.2.1"
 	versionFlag   bool
 	scanOnlyFlag  bool
 	cleanSafeFlag bool
