@@ -88,7 +88,6 @@ jobs:
           cp Formula/ineedspace.rb dist/ineedspace.rb
           sed -i.bak "s/sha256 \".*\"/sha256 \"${UNIVERSAL_SHA}\"/g" dist/ineedspace.rb
           sed -i.bak "s/download\/v[0-9.]*\/ineedspace/download\/v${VERSION}\/ineedspace/g" dist/ineedspace.rb
-          sed -i.bak "s/version \"[0-9.]*\"/version \"${VERSION}\"/g" dist/ineedspace.rb
           rm -f dist/ineedspace.rb.bak
           echo "==> Generated Homebrew Formula:"
           cat dist/ineedspace.rb
