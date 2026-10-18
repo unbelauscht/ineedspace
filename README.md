@@ -2,7 +2,19 @@
 
 > An interactive Terminal UI (TUI) and CLI disk clean-up tool designed specifically for developers and system administrators on macOS and Linux.
 
+[![GitHub Release](https://img.shields.io/github/v/release/unbelauscht/ineedspace?color=blue&logo=github)](https://github.com/unbelauscht/ineedspace/releases)
+[![Homebrew Tap](https://img.shields.io/badge/Homebrew-unbelauscht%2Ftap-F38B00?logo=homebrew&logoColor=white)](https://github.com/unbelauscht/homebrew-tap)
+[![Platform](https://img.shields.io/badge/platform-macOS-lightgrey.svg)](https://github.com/unbelauscht/ineedspace)
+
 `ineedspace` pinpoints the heavy, hidden disk consumers that standard disk utilities usually miss—such as local AI weights, forgotten VM raw disks, Android/Arduino SDK cores, package manager caches, and duplicate download archives.
+
+```bash
+# ⚡ Quick Install via Homebrew
+brew install unbelauscht/tap/ineedspace
+
+# 🚀 Run
+ineedspace
+```
 
 ---
 
