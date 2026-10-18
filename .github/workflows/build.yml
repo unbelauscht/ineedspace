@@ -86,36 +86,11 @@ jobs:
           ARM64_SHA=$(shasum -a 256 dist/ineedspace-darwin-arm64.tar.gz | awk '{print $1}')
           AMD64_SHA=$(shasum -a 256 dist/ineedspace-darwin-amd64.tar.gz | awk '{print $1}')
 
-          cat <<EOF > dist/ineedspace.rb
-class Ineedspace < Formula
-  desc "Interactive TUI and CLI disk cleaner for developers and sysadmins"
-  homepage "https://github.com/unbelauscht/ineedspace"
-  version "${VERSION}"
-  license "MIT"
-
-  on_macos do
-    if Hardware::CPU.arm?
-      url "https://github.com/unbelauscht/ineedspace/releases/download/v#{version}/ineedspace-darwin-arm64.tar.gz"
-      sha256 "${ARM64_SHA}"
-
-      def install
-        bin.install "ineedspace-darwin-arm64" => "ineedspace"
-      end
-    else
-      url "https://github.com/unbelauscht/ineedspace/releases/download/v#{version}/ineedspace-darwin-amd64.tar.gz"
-      sha256 "${AMD64_SHA}"
-
-      def install
-        bin.install "ineedspace-darwin-amd64" => "ineedspace"
-      end
-    end
-  end
-
-  test do
-    assert_match "ineedspace", shell_output("#{bin}/ineedspace --version")
-  end
-end
-EOF
+          cp Formula/ineedspace.rb dist/ineedspace.rb
+          sed -i.bak "s/CHECKSUM_ARM64_PLACEHOLDER/${ARM64_SHA}/g" dist/ineedspace.rb
+          sed -i.bak "s/CHECKSUM_AMD64_PLACEHOLDER/${AMD64_SHA}/g" dist/ineedspace.rb
+          sed -i.bak "s/version \"0.1.0\"/version \"${VERSION}\"/g" dist/ineedspace.rb
+          rm -f dist/ineedspace.rb.bak
           echo "==> Generated Homebrew Formula:"
           cat dist/ineedspace.rb
 
