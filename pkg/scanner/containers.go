@@ -153,5 +153,39 @@ func ScanContainers() []model.Component {
 		}
 	}
 
+	// 6. Docker Builder & Buildx Cache
+	dockerBuildxDir := ExpandPath("~/.docker/buildx")
+	var dockerBuildxSize int64
+	var dockerBuildxCount int
+	if DirExists(dockerBuildxDir) {
+		s, c, _ := DirSize(dockerBuildxDir)
+		dockerBuildxSize += s
+		dockerBuildxCount += c
+	}
+	if dockerBuildxSize > 2*1024*1024 {
+		components = append(components, model.Component{
+			ID:          "containers-docker-buildx",
+			Name:        "Docker Builder & Buildx Cache",
+			Category:    model.CategoryContainers,
+			Description: "Docker builder cache layers and buildx metadata in ~/.docker/buildx",
+			Path:        dockerBuildxDir,
+			SizeBytes:   dockerBuildxSize,
+			ItemCount:   dockerBuildxCount,
+			Risk:        model.RiskSafe,
+			Impact:      "Intermediate Docker builder cache layers will be purged. Local images and containers are unaffected.",
+			CleanAction: "docker builder prune -f / clean ~/.docker/buildx",
+			Cleaner: func(dryRun bool) (int64, error) {
+				if dryRun {
+					return dockerBuildxSize, nil
+				}
+				if CommandExists("docker") {
+					_, _ = RunCmdWithTimeout(25*time.Second, "docker", "builder", "prune", "-f")
+				}
+				_ = os.RemoveAll(dockerBuildxDir)
+				return dockerBuildxSize, nil
+			},
+		})
+	}
+
 	return components
 }

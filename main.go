@@ -16,7 +16,7 @@ import (
 )
 
 var (
-	version       = "0.1.0"
+	version       = "0.2.0"
 	versionFlag   bool
 	scanOnlyFlag  bool
 	cleanSafeFlag bool
@@ -100,6 +100,9 @@ func runScanOnly(categoryFilter string) {
 	fmt.Println(strings.Repeat("─", 82))
 
 	for _, c := range components {
+		if c.SizeBytes <= 0 {
+			continue
+		}
 		if categoryFilter != "" && !strings.Contains(strings.ToLower(string(c.Category)), strings.ToLower(categoryFilter)) {
 			continue
 		}
@@ -144,7 +147,7 @@ func runNonInteractiveCleanSafe(dryRun bool) {
 
 	var toClean []model.Component
 	for _, c := range components {
-		if c.Risk == model.RiskSafe {
+		if c.Risk == model.RiskSafe && c.SizeBytes > 0 {
 			toClean = append(toClean, c)
 		}
 	}

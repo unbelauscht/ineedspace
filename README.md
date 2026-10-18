@@ -21,11 +21,14 @@ ineedspace
 ## ✨ Features
 
 - **🎯 Developer-Centric Scanners**:
-  - **AI / LLMs**: Ollama model blobs (`~/.ollama/models`), LM Studio weights (`~/.lmstudio/models`), Whisper speech models, Hugging Face cache.
-  - **Containers & VMs**: Podman Linux VM disk images (`.raw`), Podman local storage, Docker Desktop raw VM disk & cache, Colima, Rancher Desktop.
-  - **Dev & Build Toolchains**: Go build & modcache, Python `uv` cache, NPM HTTP cache, Gradle dependency cache, Cargo crates & git checkouts, Kotlin/Native (Konan) precompiled toolchains.
-  - **Embedded & Mobile SDKs**: Android emulator AVDs & system images, Arduino board packages (ESP32, AVR, STM32), PlatformIO compiler frameworks.
-  - **App & System Caches**: Homebrew bottles, Xcode `DerivedData` & `iOS DeviceSupport`, user app caches (`~/Library/Caches`), and Trash.
+  - **AI / LLMs**: Ollama model blobs (`~/.ollama/models`), LM Studio weights (`~/.lmstudio/models`), Whisper speech models, Hugging Face cache, PyTorch Hub & checkpoint models (`~/.cache/torch`).
+  - **Containers & VMs**: Podman Linux VM raw disk images & local storage, Docker Desktop raw VM disk & buildx builder cache, Colima, Rancher Desktop.
+  - **Dev & Build Toolchains**:
+    - **Python**: `uv` cache, `pip` cache, `pipx` ephemeral venvs & logs, `poetry` wheel cache, `pipenv` cache, `conda/mamba` package tarballs.
+    - **JavaScript / Web**: `npm` cache, `pnpm` content-addressable store, `yarn` cache, `bun` cache.
+    - **Systems & JVM**: `go` build & modcache, `cargo` crates & git checkouts, `rustup` download cache, `gradle` build transforms, `maven` (`~/.m2`), `ruby` bundler gems, `c/c++` (`vcpkg`, `conan`), `konan` precompiled toolchains.
+  - **Embedded & Mobile SDKs**: Android emulator AVDs & system images, Arduino board packages (ESP32, AVR, STM32), PlatformIO compilers, CocoaPods cache, Swift Package Manager (`org.swift.swiftpm`).
+  - **App & System Caches**: Homebrew bottles, Xcode `DerivedData`, `iOS DeviceSupport`, Xcode CoreSimulator caches & unavailable devices, heavy user app caches (`~/Library/Caches`), and Trash.
   - **Downloads & Archives**: Detects large installers, DMGs, ISOs, and **duplicate ZIPs** (where the extracted directory already exists).
 
 - **🛡️ Safety-First Risk Classifications**:
@@ -192,7 +195,7 @@ ineedspace/
 │   │   ├── scanner.go          # Master concurrent scanner orchestrator
 │   │   ├── ai.go               # Ollama, LM Studio, Whisper, Hugging Face
 │   │   ├── containers.go       # Podman VMs, Docker data, Colima
-│   │   ├── devtools.go         # Go, uv, npm, gradle, cargo, konan, platformio, arduino, android
+│   │   ├── devtools.go         # Go, uv, pip, pipx, npm, gradle, cargo, konan, platformio, arduino, android
 │   │   ├── system.go           # Homebrew, Xcode DerivedData, app caches, trash
 │   │   ├── downloads.go        # Large installers & duplicate archives
 │   │   └── utils.go            # Parallel directory measurement & path resolution

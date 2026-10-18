@@ -119,5 +119,31 @@ func ScanAI() []model.Component {
 		}
 	}
 
+	// 5. PyTorch Hub & Checkpoints Cache
+	torchPath := ExpandPath("~/.cache/torch")
+	if DirExists(torchPath) {
+		sz, count, _ := DirSize(torchPath)
+		if sz > 10*1024*1024 {
+			components = append(components, model.Component{
+				ID:          "ai-torch",
+				Name:        "PyTorch Hub & Models Cache",
+				Category:    model.CategoryAI,
+				Description: "Downloaded PyTorch Hub models, vision weights, and checkpoints in ~/.cache/torch",
+				Path:        torchPath,
+				SizeBytes:   sz,
+				ItemCount:   count,
+				Risk:        model.RiskSafe,
+				Impact:      "Cached PyTorch model weights will be deleted. Will re-download on script execution.",
+				CleanAction: "Delete ~/.cache/torch",
+				Cleaner: func(dryRun bool) (int64, error) {
+					if dryRun {
+						return sz, nil
+					}
+					return sz, os.RemoveAll(torchPath)
+				},
+			})
+		}
+	}
+
 	return components
 }

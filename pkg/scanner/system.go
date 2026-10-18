@@ -94,7 +94,41 @@ func ScanSystem() []model.Component {
 		}
 	}
 
-	// 4. Trash
+	// 4. Xcode CoreSimulator Caches & Unavailable Simulators
+	simCaches := ExpandPath("~/Library/Developer/CoreSimulator/Caches")
+	var simTotal int64
+	var simCount int
+	if DirExists(simCaches) {
+		s, c, _ := DirSize(simCaches)
+		simTotal += s
+		simCount += c
+	}
+	if simTotal > 10*1024*1024 {
+		components = append(components, model.Component{
+			ID:          "sys-xcode-coresimulator",
+			Name:        "Xcode Simulator Caches & Unavailable Devices",
+			Category:    model.CategoryDevTools,
+			Description: "CoreSimulator caches in ~/Library/Developer/CoreSimulator/Caches and defunct simulator runtimes",
+			Path:        simCaches,
+			SizeBytes:   simTotal,
+			ItemCount:   simCount,
+			Risk:        model.RiskSafe,
+			Impact:      "Deletes simulator caches and removes unusable old simulator instances. Current simulators are preserved.",
+			CleanAction: "xcrun simctl delete unavailable / delete simulator caches",
+			Cleaner: func(dryRun bool) (int64, error) {
+				if dryRun {
+					return simTotal, nil
+				}
+				if CommandExists("xcrun") {
+					_, _ = RunCmdWithTimeout(20*time.Second, "xcrun", "simctl", "delete", "unavailable")
+				}
+				_ = os.RemoveAll(simCaches)
+				return simTotal, nil
+			},
+		})
+	}
+
+	// 5. Trash
 	trashPath := ExpandPath("~/.Trash")
 	if DirExists(trashPath) {
 		sz, count, _ := DirSize(trashPath)
@@ -128,16 +162,27 @@ func ScanSystem() []model.Component {
 		}
 	}
 
-	// 5. Heavy App Caches in ~/Library/Caches (> 300MB)
+	// 6. Heavy App Caches in ~/Library/Caches (> 300MB)
 	userCaches := ExpandPath("~/Library/Caches")
 	if DirExists(userCaches) {
 		entries, err := os.ReadDir(userCaches)
 		if err == nil {
+			// Skip caches handled in dedicated components
+			skipCaches := map[string]bool{
+				"Homebrew":          true,
+				"go-build":          true,
+				"pip":               true,
+				"pipx":              true,
+				"pypoetry":          true,
+				"pipenv":            true,
+				"Yarn":              true,
+				"CocoaPods":         true,
+				"org.swift.swiftpm": true,
+			}
 			for _, entry := range entries {
 				if entry.IsDir() {
 					name := entry.Name()
-					// Skip Homebrew and go-build (handled in separate components)
-					if name == "Homebrew" || name == "go-build" {
+					if skipCaches[name] {
 						continue
 					}
 					target := filepath.Join(userCaches, name)

@@ -60,6 +60,26 @@ func DirSize(path string) (int64, int, error) {
 	return size, count, err
 }
 
+// AggregatePaths inspects candidate directories, deduplicating and calculating total size & file count.
+func AggregatePaths(candidates []string) (existing []string, totalSize int64, totalFiles int) {
+	seen := make(map[string]bool)
+	for _, p := range candidates {
+		if p == "" || seen[p] {
+			continue
+		}
+		seen[p] = true
+		if DirExists(p) {
+			s, c, _ := DirSize(p)
+			if s > 0 {
+				totalSize += s
+				totalFiles += c
+				existing = append(existing, p)
+			}
+		}
+	}
+	return existing, totalSize, totalFiles
+}
+
 // DirSizeParallel calculates directory sizes in parallel for a slice of subdirectories.
 func DirSizeParallel(paths []string) map[string]int64 {
 	results := make(map[string]int64)

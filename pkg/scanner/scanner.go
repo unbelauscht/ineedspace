@@ -48,6 +48,15 @@ func ScanAll(progressFn func(category string)) []model.Component {
 
 	wg.Wait()
 
+	// Filter out zero-byte items
+	var valid []model.Component
+	for _, c := range components {
+		if c.SizeBytes > 0 {
+			valid = append(valid, c)
+		}
+	}
+	components = valid
+
 	// Sort components by size descending
 	sort.Slice(components, func(i, j int) bool {
 		return components[i].SizeBytes > components[j].SizeBytes

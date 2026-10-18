@@ -124,6 +124,9 @@ func (m Model) VisibleComponents() []int {
 	var indices []int
 	activeCat := m.categories[m.categoryIdx]
 	for i, c := range m.components {
+		if c.SizeBytes <= 0 {
+			continue
+		}
 		if activeCat == "All" || string(c.Category) == activeCat {
 			indices = append(indices, i)
 		}
